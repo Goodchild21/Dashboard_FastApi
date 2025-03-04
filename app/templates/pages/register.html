@@ -1,0 +1,171 @@
+{% extends "base/auth_base.html" %} 
+{% block title %} Регистрация | FastAPI HTMX {% endblock %} 
+{% block content %}
+<div
+  x-cloak
+  id="register-page"
+  x-data="register"
+  x-init="$watch('username', () => checkUsername());
+          $watch('password', () => validatePassword());
+          $watch('message', () => checkServerError(), console.log('message changed'));
+          $watch('repeatPassword', () => passwordsMatch())"
+  class="bg-gray-100 dark:bg-gray-900 flex justify-center items-center h-screen my-auto"
+>
+  <div class="bg-indigo-100 shadow-lg rounded-lg p-8 max-w-md mx-auto w-96">
+    <h1 class="text-2xl font-bold mb-4 text-center" style="color: #1a56db">
+      Регистрация пользователя
+    </h1>
+
+    <div class="mb-4">
+      <label
+        for="email"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >Email</label
+      >
+      <input
+        type="email"
+        id="email"
+        name="username"
+        x-model="username"
+        @change="checkUsername()"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        placeholder="Goodchild_21@mail.ru"
+        autocomplete="off"
+        required
+      />
+      <!-- Email Regrex Pattern checked and Error displayed-->
+      <p
+        id="username-error"
+        class="hidden mb-2 text-red-600 dark:text-red-500"
+        :class="{ 'hidden': !showUsernameError }"
+        x-show="showUsernameError"
+        x-transition.delay.100ms
+      >
+        <span class="font-medium">Введите действительный email!</span>
+      </p>
+    </div>
+    <!-- Password Div-->
+    <div x-cloak class="mb-2 max-w-md">
+      <label
+        for="password"
+        id="password-label"
+        :class="{ 'hidden': !showPassword }"
+        class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        x-show="showPassword"
+        x-transition.delay.200ms
+        >Пароль</label
+      >
+      <input
+        type="password"
+        id="password"
+        name="password"
+        :class="{ 'hidden': !showPassword }"
+        x-show="showPassword"
+        x-model="password"
+        x-transition.delay.200ms
+        class="hidden bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        autocomplete="new-password"
+        placeholder="Введенный пароль соответствует требованиям"
+        required
+      />
+      <!-- Password Regrex Pattern checked and Error displayed-->
+      <p
+        x-cloak
+        id="showPasswordError"
+        class="hidden mb-2 text-red-600 dark:text-red-500"
+        :class="{ 'hidden': !showPasswordError }"
+        x-show="showPasswordError"
+        x-transition.delay.100ms
+      >
+        <span class="font-medium"
+          >Пароль не соответствует требованию. Пример: Password123!</span
+        >
+      </p>
+      <!-- Repeat password Div -->
+      <div class="mb-2">
+        <label
+          for="repeatPassword"
+          class="hidden block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          x-show="showPassword"
+          :class="{ 'hidden': !showPassword }"
+          x-transition.delay.200ms
+          >Повторите пароль</label
+        >
+        <input
+          type="password"
+          id="repeatPassword"
+          :class="{ 'hidden': !showPassword }"
+          x-show="showPassword"
+          x-model="repeatPassword"
+          x-transition.delay.200ms
+          class="hidden shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+          placeholder="Enter password matching criteria"
+          required
+        />
+        <!-- Repeat Password input is matched against password to display error-->
+        <p
+          id="repeat-password-error"
+          class="hidden mb-2 text-red-600 dark:text-red-500"
+          :class="{ 'hidden': !showRepeatPasswordError }"
+          x-show="showRepeatPasswordError"
+          x-transition.delay.100ms
+        >
+          <span class="font-medium">Пароли не совпадают</span>
+        </p>
+      </div>
+
+      <label
+        id="password-message"
+        :class="{ 'hidden': !showPassword }"
+        x-show="showPassword"
+        x-transition.delay.200ms
+        class="mt-1 text-sm text-gray-500 dark:text-gray-300 min-w-2xl"
+      >
+      Ваш пароль должен быть длиной не менее 8 символов и включать как минимум одну цифру,
+      один символ и одну заглавную букву.
+      </label>
+    </div>
+    <!-- Server Error Div -->
+    <p
+      x-cloak
+      x-text="message"
+      x-show="showServerError"
+      role="alert"
+      class="mb-2 text-red-600 dark:text-red-500"
+    >
+      <span class="font-medium"></span>
+    </p>
+    <div x-cloak class="mt-4">
+      <button
+        x-cloak
+        type="button"
+        id="register-button"
+        :class="{
+          'text-white bg-blue-700 hover-bg-blue-800 focus-ring-4 focus-outline-none focus-ring-blue-300 font-medium rounded-lg text-sm w-full sm-w-auto px-5 py-2.5 text-center dark-bg-blue-600 dark-hover-bg-blue-700 dark-focus-ring-blue-800'
+          : username && password && repeatPassword && !showUsernameError && !showPasswordError && !showRepeatPasswordError,
+          'text-white bg-blue-400 dark:bg-blue-500 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full sm-w-auto text-center'
+          : !username || !password || !repeatPassword || showUsernameError || showPasswordError || showRepeatPasswordError
+        }"
+        x-bind:disabled="!username || !password || !repeatPassword || showUsernameError || showPasswordError || showRepeatPasswordError"
+        @click="registerUser()"
+      >
+        Зарегистрироваться
+      </button>
+      <div class="mt-2">
+        <button
+          type="button"
+          id="create-user-button"
+          hx-get="{{ url_for('get_dashboard') }}"
+          hx-target="#register-page"
+          hx-swap="outerHTML"
+          hx-push-url="true"
+          class="text-white bg-green-500 hover:bg-green-600 focus-ring-4 focus-outline-none focus-ring-green-300 font-medium rounded-lg text-sm w-full sm-w-auto px-5 py-2.5 text-center dark-bg-green-600 dark-hover-bg-green-700 dark-focus-ring-green-800"
+        >
+          Войти
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

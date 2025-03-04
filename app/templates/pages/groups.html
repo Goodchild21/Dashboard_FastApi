@@ -1,0 +1,250 @@
+{% extends "base/auth_base.html" %} {% block title %} Группы | FastAPI HTMX{%
+endblock %}
+
+{% block content %}
+<div id="dashboard-body" class="p-4 mt-4 sm:ml-64">
+  <div
+    class="p-4 border-2 border-gray-200 border rounded-lg dark:border-gray-700"
+  >
+    <div
+      x-cloak
+      x-data="{ isLoading: false, 
+                fileLoaded: false, 
+                fileName: '' , 
+                isUpdated:false, 
+                isAdded:false, 
+                isDeleted:false, 
+                message:''}"
+      id="group-page"
+    >
+<!--      -->
+      {%if error_messages%}
+      <div
+        id="error-message"
+        class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+        role="alert"
+      >
+        {% for error_message in error_messages %}
+        <span class="font-medium">{{ error_message }}</span>
+        {%endfor%}
+      </div>
+      {% else %}
+      <!-- Table for the groups extracted from the back end -->
+      <div hx-ext="response-targets">
+        <div id="create-group-form">
+          <button
+            type="submit"
+            id="group-button"
+            hx-get="{{ url_for('get_create_group') }}"
+            hx-target="#group-page"
+            hx-swap="outerHTML"
+            hx-target-404="#error-message"
+            hx-push-url="true"
+            hx-select="#create-group-form"
+            hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+            class="mb-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Добавить группу
+          </button>
+        </div>
+        <div
+          x-init="$watch('isUpdated', value => { if (value) setTimeout(() => { isUpdated = false }, 3000) }); 
+                  $watch('isAdded', value => {if (value) setTimeout(() => { isAdded = false }, 3000) }); 
+                  $watch('isDeleted', value => { if (value) setTimeout(() => { isDeleted = false }, 3000) })"
+        >
+          <div
+            x-show="isUpdated"
+            x-transition:leave="transition ease-in duration-1000"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300"
+            role="alert"
+          >
+            <span class="font-medium" x-text="message"></span>
+          </div>
+          <div
+            x-show="isAdded"
+            x-transition:leave="transition ease-in duration-1000"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <span class="font-medium" x-text="message"></span>
+          </div>
+          <div
+            x-show="isDeleted"
+            x-transition:leave="transition ease-in duration-1000"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <span class="font-medium" x-text="message"></span>
+          </div>
+        </div>
+
+        <h1 class="text-center font-bold">Группы</h1>
+
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table
+            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+          >
+            <thead
+              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            >
+              <tr>
+                <th scope="col" class="px-6 py-3">Группа</th>
+                <th scope="col" class="px-6 py-3">Задание</th>
+                <th scope="col" class="px-6 py-3">
+                  <span class="sr-only">Добавить пользователя</span>
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  <span class="sr-only">Редактировать</span>
+                </th>
+                <th scope="col" class="px-6 py-3">
+                  <span class="sr-only">Удалить</span>
+                </th>
+              </tr>
+            </thead>
+            {% for group in groups %}
+            <tbody hx-target="closest tr" hx-swap="outerHTML">
+              <tr
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+              >
+                <td
+                  scope="row"
+                  class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                >
+                  {{ group.group_name }}
+                </td>
+
+                <!-- Вызов add_group_user.html !!! -->
+                <td class="px-6 py-4">{{ group.group_desc}}</td>
+                <td class="px-2 py-4 text-right">
+                  <a
+                    href="#"
+                    hx-get="{{ url_for('get_group_users', group_id=group.id) }}"
+                    hx-swap="outerHTML"
+                    hx-target="#group-page"
+                    hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                    class="font-medium text-purple-600 dark:text-purple-500 hover:underline"
+                    >Добавить пользователя</a
+                  >
+                </td>
+                <td class="px-2 py-4 text-right">
+                  <a
+                    href="#"
+                    hx-get="{{ url_for('get_group_by_id', group_id=group.id) }}"
+                    hx-swap="outerHTML"
+                    hx-target="#group-page"
+                    hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >Редактировать</a
+                  >
+                </td>
+                <td class="pr-3 py-4 text-right">
+                  <a
+                    href="#"
+                    hx-delete="{{ url_for('delete_group', group_id=group.id) }}"
+                    hx-swap="outerHTML"
+                    hx-target="#group-page"
+                    hx-confirm="Вы уверены, что хотите удалить эту группу? "
+                    hx-vals='{"group_desc": "{{group.group_desc}}", "group_name": "{{group.group_name}}"}'
+                    class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                    hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                    >Удалить</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+
+<!-- НА ДОСКУ ЗАДАНИЙ!!! -->
+      <div class="mt-8">
+        <div>
+          <h1 class="text-center font-bold">На доску заданий</h1>
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table
+              class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+            >
+              <thead
+                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+              >
+                <tr>
+                  <th scope="col" class="px-6 py-3">Группа</th>
+                  <th scope="col" class="px-6 py-3">Задание</th>
+                  <th scope="col" class="px-6 py-3">Пользователи</th>
+                </tr>
+              </thead>
+  
+              {% for group in groups %}
+              <tbody hx-target="closest tr" hx-swap="outerHTML">
+                <tr
+                  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <td
+                    scope="row"
+                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {{ group.group_name }}
+                  </td>
+
+                  <td class="px-6 py-4">{{ group.group_desc}}</td>
+  
+                  <td class="px-6 py-4">
+                    {% if group.users %} {% for user in group.users %}
+                    <div
+                      id="user-profile"
+                      hx-get="{{ url_for('get_user_profile', user_id=user.id) }}"
+                      hx-swap="innerHTML"
+                      hx-target="this"
+                      hx-trigger="revealed"
+                    >
+                    </div>
+
+                    <!-- Статусы выполнения -->
+                    <!-- hx-trigger="submit,focusout" -->
+                    <form 
+                      id="{{ user.id }}"
+                      hx-put="post_user_status" 
+                      hx-trigger="submit"
+                      hx-swap="outerHTML"
+                      hx-target="this"
+                      hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                      >
+                  
+                      <div class="mb-6" style="display: flex;">
+                        <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option value="ok">Выполнено</option>
+                          <option selected="selected" value="in_work">В процессе</option>
+                          <option value="help">Нужна обратная связь!</option>
+                          <option value="wasted">Потрачено</option>
+                        </select>
+
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-0.5 mx-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                          Изменить
+                        </button>
+                      </div>
+                    </form>
+
+                    {% endfor %}
+                    {% else %} No users allocated {% endif %}
+                  </td>
+                </tr>
+              </tbody>
+            
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+        {% endif %}
+<!--      -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
