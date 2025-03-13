@@ -10,14 +10,7 @@ Model = TypeVar("Model", bound=Type[BaseModel])
 def pydantic_partial(
     exclude_fields: Optional[list[str]] = None,
 ) -> Callable[[Model], Model]:
-    """A decorator that create a partial model.
 
-    Args:
-        model (Type[BaseModel]): BaseModel model.
-
-    Returns:
-        Type[BaseModel]: ModelBase partial model.
-    """
     if exclude_fields is None:
         exclude_fields = []
 
@@ -25,7 +18,7 @@ def pydantic_partial(
         base_model: Type[BaseModel] = model
 
         if not issubclass(base_model, BaseModel):
-            raise TypeError("Model must be a subclass of BaseModel")
+            raise TypeError("Модель должна быть подклассом BaseModel")
 
         def make_field_optional(
             field: FieldInfo, default: Any = None

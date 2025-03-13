@@ -1,6 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %}Upload | FastAPI HTMX{%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Загрузка файлов | FastAPI HTMX {% endblock %}
 
+{% block content %}
 <div id="dashboard-body" class="p-4 mt-4 sm:ml-64">
   <div
     class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"
@@ -210,12 +211,14 @@ endblock %} {% block content %}
         class="flex items-center justify-center rounded bg-gray-50 h-auto dark:bg-gray-800 p-4"
         id="upload-result"
       >
-        <!-- Upload result will be displayed here -->
+
+        <!-- Результат загрузки будет отображен здесь -->
+
       </div>
 
       <div class="mt-2">
         <div>
-          <h1 class="text-center font-bold mb-2">Files Uploaded</h1>
+          <h1 class="text-center font-bold mb-2">Файлы загружены</h1>
           <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table
               id="upload-files-table"
@@ -229,8 +232,8 @@ endblock %} {% block content %}
                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
               >
                 <tr>
-                  <th scope="col" class="px-6 py-3">NAME</th>
-                  <th scope="col" class="px-6 py-3">DATE</th>
+                  <th scope="col" class="px-6 py-3">ИМЯ</th>
+                  <th scope="col" class="px-6 py-3">ДАТА</th>
                   <th scope="col" class="px-6 py-3"></th>
                   <th scope="col" class="px-6 py-3"></th>
                 </tr>

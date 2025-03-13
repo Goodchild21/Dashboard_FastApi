@@ -1,6 +1,6 @@
 /**
- * Sets up an event listener for the "htmx:afterRequest" event on the upload-files-table element.
- * When triggered, it checks if the event target is a file download button and initiates a file download.
+ * Устанавливает прослушку событий для события "htmx:afterRequest" в элементе upload-files-table.
+ * При срабатывании проверяет, является ли целью события кнопка загрузки файла, и инициирует загрузку файла.
  * function
  * listens htmx:afterRequest
  * returns {void}

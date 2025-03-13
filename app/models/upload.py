@@ -5,7 +5,7 @@ from sqlalchemy.sql.schema import ForeignKey
 from app.models.base import BaseSQLModel
 
 
-# Creating a model for files uploaded by users
+# Таблица загрузок файлов пользователей
 class Upload(BaseSQLModel):
     __tablename__ = "upload"
     name: Mapped[str] = mapped_column(String(length=250), nullable=False)

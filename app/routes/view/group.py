@@ -22,6 +22,7 @@ from app.schema.group import GroupCreate
 from app.schema.group import GroupUserLink as GroupUserLinkCreate
 from app.templates import templates
 
+
 group_view_route = APIRouter()
 
 
@@ -34,7 +35,7 @@ user_crud = SQLAlchemyCRUD[UserModelDB](
 )
 
 
-# Defining a route to navigate to the group page
+# Определение маршрута для перехода на страницу группы
 @group_view_route.get("/groups", response_class=HTMLResponse)
 async def get_groups(
     request: Request,
@@ -49,10 +50,8 @@ async def get_groups(
             raise HTTPException(
                 status_code=403, detail="Вы не авторизованы для этой страницы"
             )
-        # Access the cookies using the Request object
+        # Доступ к файлам cookie с помощью объекта Request
         groups = await group_crud.read_all(db, skip, limit, join_relationships=True)
-        # users = await user_crud.read_all(db, skip, limit, join_relationships=True) ###
-
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
 
         response = templates.TemplateResponse(
@@ -60,7 +59,6 @@ async def get_groups(
             {
                 "request": request,
                 "groups": groups,
-                # "users": users, ###
                 "user_type": current_user.is_superuser,
                 "csrf_token": csrf_token,
             },
@@ -81,7 +79,7 @@ async def get_groups(
         )
 
 
-# Defining a route to get the user profile based on id
+# Определение маршрута для получения профиля пользователя на базе id
 @group_view_route.get("/get_user_profile/{user_id}", response_class=HTMLResponse)
 async def get_user_profile(
     request: Request,
@@ -104,16 +102,16 @@ async def get_user_profile(
     )
 
 
-# Defining a route to add a new group to the database
+# Определение маршрута для добавления новой группы в базу данных
 @group_view_route.get("/get_create_group", response_class=HTMLResponse)
 async def get_create_group(
     request: Request,
     current_user: UserModelDB = Depends(current_active_user),
 ):
-    # checking the current user as super user
+    # superuser
     if not current_user.is_superuser:
         raise HTTPException(status_code=403, detail="Отсутствует авторизация для данной группы!")
-    # Redirecting to the add group page upon successful group creation
+    # Перенаправление на страницу добавления группы после успешного создания группы
     csrf_token = request.headers.get("X-CSRF-Token")
 
     response = templates.TemplateResponse(
@@ -128,7 +126,7 @@ async def get_create_group(
     return response
 
 
-# Route to get the group by ID
+# Маршрут для получения группы по ID
 @group_view_route.get("/get_group/{group_id}", response_class=HTMLResponse)
 async def get_group_by_id(
     request: Request,
@@ -136,7 +134,7 @@ async def get_group_by_id(
     db: CurrentAsyncSession,
     current_user: UserModelDB = Depends(current_active_user),
 ):
-    # checking the current user as super user
+    # superuser
     if not current_user.is_superuser:
         raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
     group = await group_crud.read_by_primary_key(db, group_id)
@@ -164,7 +162,7 @@ async def post_create_group(
 ):
     await csrf_protect.validate_csrf(request)
 
-    # checking the current user as super user
+    # superuser
     if not current_user.is_superuser:
         raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
 
@@ -187,7 +185,7 @@ async def post_create_group(
 
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
 
-        # Redirecting to the add group page upon successful group creation
+        # Перенаправление на страницу добавления группы после успешного создания группы
         headers = {
             "HX-Location": "/groups",
             "HX-Trigger": json.dumps(
@@ -204,10 +202,10 @@ async def post_create_group(
 
         response = HTMLResponse(content="", headers=headers)
 
-        # UnSetting the CSRF cookie
+        # Отключение CSRF-cookie
         csrf_protect.unset_csrf_cookie(response)
 
-        # Setting a new CSRF cookie for validation by post future requests
+        # Установка нового CSRF-файла cookie для проверки при последующих запросах
         csrf_protect.set_csrf_cookie(signed_token, response)
 
         return response
@@ -225,7 +223,7 @@ async def post_create_group(
         )
 
 
-# Route to update a group
+# Маршрут для обновления группы
 @group_view_route.put("/post_update_group{group_id}", response_class=HTMLResponse)
 async def post_update_group(
     request: Request,
@@ -238,13 +236,13 @@ async def post_update_group(
 
     try:
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
 
         form = await request.form()
 
-        # Iterate over the form fields and sanitize the values before validating against the Pydantic model
+        # Очистка полей формы перед проверкой по модели Pydantic.
         group_update = GroupCreate(
             group_name=nh3.clean(str(form.get("group_name"))),
             group_desc=nh3.clean(str(form.get("group_desc"))),
@@ -254,7 +252,7 @@ async def post_update_group(
 
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
 
-        # Redirecting to the add group page upon successful group creation
+        # Перенаправление на страницу добавления группы после успешного создания группы
         headers = {
             "HX-Location": "/groups",
             "HX-Trigger": json.dumps(
@@ -290,7 +288,7 @@ async def post_update_group(
         )
 
 
-# Route to delete a group
+# Маршрут для удаления группы
 @group_view_route.delete("/delete_group/{group_id}", response_class=HTMLResponse)
 async def delete_group(
     request: Request,
@@ -309,7 +307,7 @@ async def delete_group(
 
         group_name = parsed_values["group_name"][0]
 
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
         await group_crud.delete(db, group_id)
@@ -348,13 +346,11 @@ async def delete_group(
         )
 
 
-"""
 
-################# Group Users Allocation Routes #################
+################# Маршруты распределения групп пользователей #################
 
-"""
 
-#Добавление user в таблицу group_users
+# Добавление user в таблицу group_users
 @group_view_route.get("/get_group_users/{group_id}", response_class=HTMLResponse)
 async def get_group_users(
     request: Request,
@@ -362,7 +358,7 @@ async def get_group_users(
     db: CurrentAsyncSession,
     current_user: UserModelDB = Depends(current_active_user),
 ):
-    # checking the current user as super user
+    # superuser
     if not current_user.is_superuser:
         raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
     group = await group_crud.read_by_primary_key(db, group_id)
@@ -388,7 +384,7 @@ async def get_group_users(
     )
 
 
-# ============= Update the UserGroupLink model based on selected user for a group =======================
+# ============= Обновление модели UserGroupLink на основе выбранного пользователя для группы =======================
 @group_view_route.post("/post_group_user_link/{group_id}", response_class=HTMLResponse)
 async def post_group_user_link(
     request: Request,
@@ -401,7 +397,7 @@ async def post_group_user_link(
 
     try:
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления группы!")
         form = await request.form()
@@ -410,7 +406,7 @@ async def post_group_user_link(
         selected_users = set(form.getlist("users_selected"))
         # all_status = set(form.getlist("status")) #
 
-        # Removing the users already selected from the list of all users
+        # Удаление уже выбранных пользователей из списка всех пользователей
         non_selected_users = all_users - selected_users
         db_data = []
         for user_id in form.getlist("users_selected"):
@@ -489,7 +485,7 @@ async def post_group_user_link(
         )
 
 
-# ==========================================================================
+# ==================================В работе===================================
 @group_view_route.put("/post_user_status", response_class=HTMLResponse)
 async def post_user_status(
     request: Request,
@@ -499,10 +495,11 @@ async def post_user_status(
     current_user: UserModelDB = Depends(current_active_user), #
     csrf_protect: CsrfProtect = Depends(), #
     ):
-    form = await request.form()
-
-    # name = "status"
-    status = str(form.get("status"))
-    # user_status = await db.select("user_status_in_group")
-
-    return print(status)
+    pass
+#     form = await request.form()
+#
+#     # name = "status"
+#     status = str(form.get("status"))
+#     # user_status = await db.select("user_status_in_group")
+#
+#     return print(status)

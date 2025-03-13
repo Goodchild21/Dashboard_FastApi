@@ -12,16 +12,12 @@ from app.models.users import User
 
 
 async def create_db_and_tables():
-    # async with engine.begin() as conn:
-    #     logger.info("Creating database tables...")
-    #     await conn.run_sync(Base.metadata.create_all)
-
     async with async_session_maker() as session:
         password_helper = PasswordHelper()
-        # Statement to check that user is created already for super user email
+        # Проверка того, что суперпользователь уже создан для данной электронной почты
         select_stmt = select(User).where(User.email == "superuser@admin.com")
 
-        # Query to database to execute the statement
+        # Запрос к базе данных для выполнения входа
         query = await session.execute(select_stmt)
         user = User(
             email="superuser@admin.com",

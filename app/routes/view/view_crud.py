@@ -44,8 +44,7 @@ class SQLAlchemyCRUD(Generic[ModelType]):
                     stmt = stmt.options(joinedload(relationship))
 
                 else:
-                    # Handle error or invalid relationship specification
-                    raise ValueError(f"No relationship found for {join_column}")
+                    raise ValueError(f"Не найдена связь с {join_column}")
         stmt = stmt.offset(skip)
         if limit:
             stmt = stmt.limit(limit)
@@ -63,17 +62,16 @@ class SQLAlchemyCRUD(Generic[ModelType]):
         if join_relationships:
             for related_model, join_column in self.related_models.items():
                 relationship = getattr(self.db_model, join_column, None)
-                # print(relationship)
+
                 if relationship is not None:
                     stmt = stmt.options(joinedload(relationship))
                 else:
-                    # Handle error or invalid relationship specification
-                    raise ValueError(f"No relationship found for {join_column}")
+                    raise ValueError(f"Связь не найдена {join_column}")
         stmt = stmt.where(self.db_model.id == id)
         query = await db.execute(stmt)
         record = query.scalar()
         if not record:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         return record
 
     async def read_by_column(
@@ -98,7 +96,7 @@ class SQLAlchemyCRUD(Generic[ModelType]):
         if limit > 0:
             stmt = stmt.limit(limit)
         query = await db.execute(stmt)
-        # unique(): to avoid duplicate rows in case of join operations.
+
         records = list(query.unique().scalars().all())
         if not records:
             return None
@@ -114,7 +112,7 @@ class SQLAlchemyCRUD(Generic[ModelType]):
         stmt = select(self.db_model).where(self.db_model.id == id)
         query = await db.execute(stmt)
         if not query:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         db_item = query.scalar_one()
         if db_item:
             for key, value in data.items():
@@ -132,7 +130,7 @@ class SQLAlchemyCRUD(Generic[ModelType]):
         stmt = select(self.db_model).where(self.db_model.id == id)
         query = await db.execute(stmt)
         if not query:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         db_item = query.scalar_one()
         if db_item:
             await db.delete(db_item)

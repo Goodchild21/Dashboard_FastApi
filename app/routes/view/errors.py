@@ -13,18 +13,18 @@ def handle_error(
     error: Union[ValidationError, HTTPException, Exception],
 ) -> templates.TemplateResponse:
     """
-    Handles errors that occur during the processing of a request, and returns a template
-    response with the appropriate error messages.
+    Обрабатывает ошибки, возникающие во время обработки запроса, и возвращает шаблон
+    ответа с соответствующими сообщениями об ошибках.
 
-    Args:
-        template (str): The name of the template to render.
-        context (dict): This is a dictionary containing the data that will be passed to the template.
-        It should include the request object and any database objects that need to be rendered in the template.
-        For example, you might pass {"request": request, "group": await group_crud.read_by_primary_key(db, group_id)} as the context.
-        error (Exception): This is the exception that was raised during the execution of your code.
+    Аргументы:
+    template (str): Имя шаблона для рендеринга.
+    context (dict): Это словарь, содержащий данные, которые будут переданы в шаблон.
+    Он должен включать объект запроса и любые объекты базы данных, которые необходимо отобразить в шаблоне.
+    Например, вы можете передать {"request": request, "group": await group_crud.read_by_primary_key(db, group_id)} в качестве контекста.
+    error (Exception): Это исключение, возникшее во время выполнения вашего кода.
 
-    Returns:
-        A FastAPI response containing the rendered template with the error messages.
+    Возвращает:
+    Ответ FastAPI, содержащий отрисованный шаблон с сообщениями об ошибках.
     """
     logger.info(f"context: {context}, error: {error}")
     error_messages: list[str] = []
@@ -35,11 +35,11 @@ def handle_error(
                 for err in error.errors()
             ]
         else:
-            error_messages = ["An unexpected validation error occurred"]
+            error_messages = ["Произошла непредвиденная ошибка проверки"]
     elif isinstance(error, HTTPException):
         error_messages = [error.detail]
     else:
-        error_messages = ["An unexpected error occurred: {}".format(error)]
+        error_messages = ["Произошла непредвиденная ошибка: {}".format(error)]
 
     context["error_messages"] = error_messages
     logger.info(error_messages)

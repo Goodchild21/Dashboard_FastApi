@@ -1,5 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %}Добавить группу | FastAPI HTMX {%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Добавление группы | FastAPI HTMX {% endblock %}
+
+{% block content %}
 
 <form
   id="create-group-form"
@@ -20,10 +22,10 @@ endblock %} {% block content %}
       id="group-type"
       name="group_name"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-      placeholder="Enter the group type"
-      _="on htmx:validation:validate
+      placeholder="Введите название группы"
+      _ ="on htmx:validation:validate
                 if my.value == ''
-                    call me.setCustomValidity('Please enter the Group Type')
+                    call me.setCustomValidity('Введите тип группы')
                 else
                     call me.setCustomValidity('')"
       required
@@ -39,7 +41,7 @@ endblock %} {% block content %}
       type="text"
       id="group-desc"
       name="group_desc"
-      placeholder="Enter the group description."
+      placeholder="Введите описание группы"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
       required
     />

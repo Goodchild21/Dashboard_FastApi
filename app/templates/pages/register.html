@@ -33,7 +33,7 @@
         autocomplete="off"
         required
       />
-      <!-- Email Regrex Pattern checked and Error displayed-->
+      <!-- Проверка шаблона электронной почты и отображение ошибки -->
       <p
         id="username-error"
         class="hidden mb-2 text-red-600 dark:text-red-500"
@@ -68,7 +68,7 @@
         placeholder="Введенный пароль соответствует требованиям"
         required
       />
-      <!-- Password Regrex Pattern checked and Error displayed-->
+      <!-- Проверка шаблона пароля и отображение ошибки -->
       <p
         x-cloak
         id="showPasswordError"
@@ -77,8 +77,7 @@
         x-show="showPasswordError"
         x-transition.delay.100ms
       >
-        <span class="font-medium"
-          >Пароль не соответствует требованию. Пример: Password123!</span
+        <span class="font-medium">Пароль не соответствует требованию. Пример: Password123!</span
         >
       </p>
       <!-- Repeat password Div -->
@@ -102,7 +101,7 @@
           placeholder="Enter password matching criteria"
           required
         />
-        <!-- Repeat Password input is matched against password to display error-->
+        <!-- Повтор ввода пароля при отображении ошибки. -->
         <p
           id="repeat-password-error"
           class="hidden mb-2 text-red-600 dark:text-red-500"

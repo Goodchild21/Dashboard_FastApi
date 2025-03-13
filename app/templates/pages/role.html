@@ -1,6 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %} Статусы в приложении | FastAPI HTMX{%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Статусы в приложении | FastAPI HTMX{% endblock %}
 
+{% block content %}
 <div id="dashboard-body" class="p-4 mt-4 sm:ml-64">
   <div
     class="p-4 border-2 border-gray-200 border rounded-lg dark:border-gray-700"
@@ -61,7 +62,8 @@ endblock %} {% block content %}
           <span class="font-medium" x-text="message"></span>
         </div>
       </div>
-      <!-- Table for the roles extracted from the back end -->
+
+      <!-- Таблица ролей, извлеченных из бэкэнда -->
       <div hx-ext="response-targets">
         <div id="create-role-form">
           <button

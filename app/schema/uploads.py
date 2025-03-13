@@ -59,10 +59,10 @@ class FileBase(BaseModel):
         if v == "":
             return None
         elif v < 0 or v == 0:
-            raise ValueError("File size cannot be zero")
-        # checking if the file size is greater than 10 MB
+            raise ValueError("Размер файла не может быть равен нулю")
+        # проверка размера файла более 10 МБ
         elif v > 10000000:
-            raise ValueError("File size cannot be greater than 10 MB")
+            raise ValueError("Размер файла не может превышать 10 МБ.")
         return v
 
 

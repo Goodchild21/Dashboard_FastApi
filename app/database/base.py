@@ -12,7 +12,7 @@ sys.path.append(BASE_DIR)
 
 
 class Base(DeclarativeBase):
-    metadata: sqlalchemy.MetaData = sqlalchemy.MetaData()  # type: ignore
+    metadata: sqlalchemy.MetaData = sqlalchemy.MetaData()
 
 
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -26,11 +26,3 @@ def init_models():
     from ..models.groups import Group, Permission, UserGroupLink  # noqa: F401
     from ..models.upload import Upload  # noqa: F401
     from ..models.users import Role, User, UserActivity  # noqa: F401
-
-
-# Base = declarative_base()
-
-
-# Declaring the base class for all models
-# class Base(DeclarativeBase):
-#     pass

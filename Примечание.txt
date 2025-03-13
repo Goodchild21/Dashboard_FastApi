@@ -1,0 +1,57 @@
+При монтаже приложения стоит обратить внимание на версию Питона!!! Не меньше 3.11
+Файл main.py изменен из расчета добавления в него файла app, чтобы сробатывала команда
+uvicorn main:app --reload, т.к. запуск app ведется из main!!!
+
+python -m alembic revision --autogenerate
+python -m alembic upgrade head
+
+Примечание по монтажу приложения:
+docker compose up --build - собрать и запустить контейнер
+docker compose build - собрать контейнер
+docker compose up -d - запустить контейнер
+
+
+
+Зарегистрированные пользователи:
+superuser@admin.com
+password123
+
+Goodchild_21@mail.ru
+210888Gebels!
+
+Artemiy_cat@mail.ru
+123456789A!
+
+Sergey_superstar@mail.ru
+12345Serg!
+
+
+                    <form
+                      id="change_status"
+                      hx-target="this"
+                      hx-get="{{url_for('get_user_status')}}"
+                      hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
+                      hx-swap="outerHTML"
+                    >
+                      <div class="mb-6" style="display: flex;">
+                        <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option value="ok" {{ "selected" if user.user_status_in_group == "ok" }}>Выполнено</option>
+                          <!-- В selected вставить переменную со значением из базы -->
+                          <option selected="selected" value="in_work">В процессе</option>
+                          <option value="help">Нужна обратная связь!</option>
+                          <option value="wasted">Потрачено</option>
+                        </select>
+
+                        <button
+                          type="submit"
+                          id="status_selected"
+                          name="status_selected"
+                          value="{{user.id}}"
+
+                          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-1 py-0.5 mx-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          >
+
+                          Изменить
+                        </button>
+                      </div>
+                    </form>

@@ -58,36 +58,21 @@ app.include_router(upload_view_route, tags=["Pages", "Upload"])
 @app.get("/authenticated-route")
 async def authenticated_route(user: User = Depends(current_active_user)):
     logger.info(user.id)
-    return {"message": f"Hello {user.email}!"}
+    return {"message": f"Добро пожаловать, {user.email}!"}
 
 
 @app.on_event("startup")
 async def on_startup():
-    # Not needed if you setup a migration system like Alembic
+    # Не требуется, если вы настраиваете систему миграции, например Alembic
     await create_db_and_tables()
-    # await create_superuser()
-    logger.info("Application started")
+    logger.info("ПРИЛОЖЕНИЕ ЗАПУЩЕНО/ПЕРЕЗАПУЩЕНО!!!")
 
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    logger.info("Application shutdown")
+    logger.info("ПРИЛОЖЕНИЕ ОТКЛЮЧЕНО!!!")
 
 
 @CsrfProtect.load_config
 def get_csrf_config():
     return CsrfSettings()
-
-
-
-#
-# if __name__ == "__main__":
-#     import uvicorn
-#
-#     logger.info("Starting uvicorn in reload mode")
-#     uvicorn.run(
-#         "app.app:app",
-#         host="127.0.0.1",
-#         reload=True,
-#         port=8080,
-#     )

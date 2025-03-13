@@ -19,7 +19,7 @@ class Group(BaseSQLModel):
     )
     group_desc: Mapped[str | None] = mapped_column(String(length=1024), nullable=True)
 
-    # Creating enum for the permission to be given to the group
+    # Таблица групп на базе BaseSQLModel
     permission: Mapped[Permission] = mapped_column(Permission, nullable=True)
 
     users: Mapped[list["User"]] = relationship(
@@ -27,10 +27,10 @@ class Group(BaseSQLModel):
     )
 
 
-# Associated table for the group and user relationship
+# Таблица связи групп и пользователей
 class UserGroupLink(BaseSQLModel):
     __tablename__ = "group_users"
     group_id: Mapped[UUID] = mapped_column(ForeignKey("group.id"), default=None)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), default=None)
-    # --------------------------------------------------------------------------
+    # ----------------------------------Доделать статус------------------------------------
     user_status_in_group: Mapped[str | None] = mapped_column(String(length=30), nullable=True)

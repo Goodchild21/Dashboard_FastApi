@@ -8,7 +8,7 @@
     @click="sidebarOpen = !sidebarOpen"
     class="fixed top-4 left-4 z-50 inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
   >
-    <span class="sr-only">Open sidebar</span>
+    <span class="sr-only">Открыть слайд-бар</span>
     <svg
       class="w-6 h-6"
       aria-hidden="true"
@@ -144,7 +144,7 @@
           </a>
         </li>
 
-        <!-- Тут был li с upload -->
+        <!-- Тут будет li с Загрузками (upload) -->
         
         <li x-data="{ isDisabled: false }">
           <a
@@ -250,82 +250,82 @@
           </a>
         </li>
       </ul>
-<!--      <div-->
-<!--        id="dropdown-cta"-->
-<!--        class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900"-->
-<!--        role="alert"-->
-<!--      >-->
-<!--        <div class="flex items-center mb-3">-->
-<!--          <span-->
-<!--            class="bg-orange-100 text-orange-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900"-->
-<!--            >Beta</span-->
-<!--          >-->
-<!--          <button-->
-<!--            type="button"-->
-<!--            class="ml-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 h-6 w-6 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"-->
-<!--            data-dismiss-target="#dropdown-cta"-->
-<!--            aria-label="Close"-->
-<!--          >-->
-<!--            <span class="sr-only">Close</span>-->
-<!--            <svg-->
-<!--              class="w-2.5 h-2.5"-->
-<!--              aria-hidden="true"-->
-<!--              xmlns="http://www.w3.org/2000/svg"-->
-<!--              fill="none"-->
-<!--              viewBox="0 0 14 14"-->
-<!--            >-->
-<!--              <path-->
-<!--                stroke="currentColor"-->
-<!--                stroke-linecap="round"-->
-<!--                stroke-linejoin="round"-->
-<!--                stroke-width="2"-->
-<!--                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"-->
-<!--              />-->
-<!--            </svg>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <p class="mb-3 text-justify text-sm text-blue-800 dark:text-blue-400">-->
-<!--          The admin dashboard is currently in a beta testing phase, which means-->
-<!--          that it is not yet fully released and may contain bugs or issues. As a-->
-<!--          user, you are encouraged to report any bugs or issues that you-->
-<!--          encounter while using the dashboard.-->
-<!--        </p>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--      <div-->
+    <!--        id="dropdown-cta"-->
+    <!--        class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900"-->
+    <!--        role="alert"-->
+    <!--      >-->
+    <!--        <div class="flex items-center mb-3">-->
+    <!--          <span-->
+    <!--            class="bg-orange-100 text-orange-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900"-->
+    <!--            >Beta</span-->
+    <!--          >-->
+    <!--          <button-->
+    <!--            type="button"-->
+    <!--            class="ml-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 h-6 w-6 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"-->
+    <!--            data-dismiss-target="#dropdown-cta"-->
+    <!--            aria-label="Close"-->
+    <!--          >-->
+    <!--            <span class="sr-only">Close</span>-->
+    <!--            <svg-->
+    <!--              class="w-2.5 h-2.5"-->
+    <!--              aria-hidden="true"-->
+    <!--              xmlns="http://www.w3.org/2000/svg"-->
+    <!--              fill="none"-->
+    <!--              viewBox="0 0 14 14"-->
+    <!--            >-->
+    <!--              <path-->
+    <!--                stroke="currentColor"-->
+    <!--                stroke-linecap="round"-->
+    <!--                stroke-linejoin="round"-->
+    <!--                stroke-width="2"-->
+    <!--                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"-->
+    <!--              />-->
+    <!--            </svg>-->
+    <!--          </button>-->
+    <!--        </div>-->
+    <!--        <p class="mb-3 text-justify text-sm text-blue-800 dark:text-blue-400">-->
+    <!--          The admin dashboard is currently in a beta testing phase, which means-->
+    <!--          that it is not yet fully released and may contain bugs or issues. As a-->
+    <!--          user, you are encouraged to report any bugs or issues that you-->
+    <!--          encounter while using the dashboard.-->
+    <!--        </p>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
-<!-- <li>
-  <a
-    href="#"
-    hx-get="{{ url_for('get_upload_file') }}"
-    hx-target="#dashboard-body"
-    hx-swap="outerHTML"
-    hx-push-url="true"
-    class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-    @click="sidebarOpen = false"
-  >
-    <svg
-      class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      fill="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        fill-rule="evenodd"
-        d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
-        clip-rule="evenodd"
-      />
-    </svg>
+    <!-- <li>
+      <a
+        href="#"
+        hx-get="{{ url_for('get_upload_file') }}"
+        hx-target="#dashboard-body"
+        hx-swap="outerHTML"
+        hx-push-url="true"
+        class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+        @click="sidebarOpen = false"
+      >
+        <svg
+          class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 3a1 1 0 0 1 .78.375l4 5a1 1 0 1 1-1.56 1.25L13 6.85V14a1 1 0 1 1-2 0V6.85L8.78 9.626a1 1 0 1 1-1.56-1.25l4-5A1 1 0 0 1 12 3ZM9 14v-1H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-4v1a3 3 0 1 1-6 0Zm8 2a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z"
+            clip-rule="evenodd"
+          />
+        </svg>
 
-    <span class="flex-1 ml-3 whitespace-nowrap">Upload</span>
-    <!-- <span
-    class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
-    >3</span
-  > -->
-  <!-- </a>
-</li> -->
+        <span class="flex-1 ml-3 whitespace-nowrap">Upload</span>
+        <span
+        class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300"
+        >3</span
+      > -->
+      <!-- </a>
+    </li> -->
 
     {%endif%}
   </aside>

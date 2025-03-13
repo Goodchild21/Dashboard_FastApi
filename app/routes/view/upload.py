@@ -60,11 +60,11 @@ async def post_upload_file(
     try:
         if not current_user.is_superuser:
             raise HTTPException(
-                status_code=403, detail="Not authorized to upload files"
+                status_code=403, detail="Нет авторизации"
             )
 
         if file.filename is None:
-            raise HTTPException(status_code=400, detail="Filename is missing")
+            raise HTTPException(status_code=400, detail="файл отсутсвует")
         file_extension = file.filename.split(".")[-1]
         unique_name = f"{uuid.uuid4()}.{file_extension}"
 
@@ -90,7 +90,7 @@ async def post_upload_file(
                 {
                     "showAlert": {
                         "type": "added",
-                        "message": f"{file.filename} uploaded successfully. URL: {file_url}",
+                        "message": f"{file.filename} успешно дабавлено. URL: {file_url}",
                         "source": "upload-page",
                     },
                     "refreshUploadTable": "",
@@ -102,7 +102,7 @@ async def post_upload_file(
         return handle_error("pages/upload.html", {"request": request}, e)
 
 
-# Making a route to get the uploaded files
+
 @upload_view_route.get("/get_uploaded_files", response_class=HTMLResponse)
 async def get_uploaded_files(
     request: Request,
@@ -112,7 +112,7 @@ async def get_uploaded_files(
     limit: int = 100,
 ):
     if not current_user.is_superuser:
-        raise HTTPException(status_code=403, detail="Not authorized to view files")
+        raise HTTPException(status_code=403, detail="Нет авторизации для просмотра файлов")
     try:
         files = await upload_crud.read_by_column(
             db, "user_id", current_user.id, skip, limit
@@ -141,7 +141,6 @@ async def get_uploaded_files(
         )
 
 
-# Route to download a file from the back end
 @upload_view_route.get("/download/{file_unique_name}")
 async def download_file(
     request: Request,
@@ -150,7 +149,7 @@ async def download_file(
     current_user: UserModelDB = Depends(current_active_user),
 ):
     if not current_user.is_superuser:
-        raise HTTPException(status_code=403, detail="Not authorized to download files")
+        raise HTTPException(status_code=403, detail="Нет авторизации для загрузки файлов")
     try:
 
         file_response = await minio.get_file(file_unique_name)
@@ -170,7 +169,6 @@ async def download_file(
         )
 
 
-# Route to delete a file from the back end
 @upload_view_route.delete("/delete/{file_unique_name}")
 async def delete_file(
     request: Request,
@@ -183,7 +181,7 @@ async def delete_file(
     try:
         if not current_user.is_superuser:
             raise HTTPException(
-                status_code=403, detail="Not authorized to delete files"
+                status_code=403, detail="Нет авторизации для удаления файлов"
             )
 
         extra_info = await request.body()
@@ -201,7 +199,7 @@ async def delete_file(
                 {
                     "showAlert": {
                         "type": "deleted",
-                        "message": f"{file_id} deleted successfully.",
+                        "message": f"{file_id} успешно удалено.",
                         "source": "upload-page",
                     },
                     "refreshUploadTable": "",

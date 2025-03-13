@@ -1,6 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %} Пользователи | FastAPI HTMX {%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Пользователи | FastAPI HTMX {% endblock %}
 
+{% block content %}
 <div id="dashboard-body" class="p-4 mt-4 sm:ml-64">
   <div
     class="p-4 border-2 border-gray-200 border rounded-lg dark:border-gray-700"
@@ -25,7 +26,7 @@ endblock %} {% block content %}
         {%endfor%}
       </div>
       {% else %}
-      <!-- Table for the users extracted from the back end -->
+      <!-- Таблица для пользователей, извлеченных из бэкэнда-->
       <div hx-ext="response-targets">
         <div id="create-user-form">
           <div
@@ -133,7 +134,7 @@ endblock %} {% block content %}
                   </td>
                   <td class="px-6 py-4">
                     {% if user.role and user.role.role_name %} {{
-                    user.role.role_name }} {% else %} Not Available {% endif %}
+                    user.role.role_name }} {% else %} Нет в наличии {% endif %}
                   </td>
 
                   <td class="px-6 py-4">

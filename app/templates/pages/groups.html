@@ -1,5 +1,5 @@
-{% extends "base/auth_base.html" %} {% block title %} Группы | FastAPI HTMX{%
-endblock %}
+{% extends "base/auth_base.html" %}
+{% block title %} Группы | FastAPI HTMX{% endblock %}
 
 {% block content %}
 <div id="dashboard-body" class="p-4 mt-4 sm:ml-64">
@@ -29,7 +29,7 @@ endblock %}
         {%endfor%}
       </div>
       {% else %}
-      <!-- Table for the groups extracted from the back end -->
+      <!-- Таблица для групп, извлеченных из бэкэнда -->
       <div hx-ext="response-targets">
         <div id="create-group-form">
           <button
@@ -217,7 +217,7 @@ endblock %}
                       hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'
                       >
                   
-                      <div class="mb-6" style="display: flex;">
+                      <div class="mb-6 flex">
                         <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                           <option value="ok">Выполнено</option>
                           <option selected="selected" value="in_work">В процессе</option>
@@ -232,7 +232,7 @@ endblock %}
                     </form>
 
                     {% endfor %}
-                    {% else %} No users allocated {% endif %}
+                    {% else %} Пользователи не назначены {% endif %}
                   </td>
                 </tr>
               </tbody>

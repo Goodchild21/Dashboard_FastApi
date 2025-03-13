@@ -28,7 +28,7 @@
       </div>
       {% else %}
 
-      <!-- Groups Allocation -->
+      <!-- Распределение групп -->
       <!-- <div class="mt-8"> -->
         <div>
           <h1 class="text-center font-bold">Распределение заданий</h1>
@@ -66,7 +66,7 @@
                       hx-target="this"
                       hx-trigger="revealed"
                     ></div>
-                    {% endfor %} {% else %} No users allocated {% endif %}
+                    {% endfor %} {% else %} Пользователи не выделены {% endif %}
                   </td>
                 </tr>
               </tbody>
@@ -74,8 +74,8 @@
             </table>
           </div>
         </div>
-        {% endif %}
-      <!-- </div> -->
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}

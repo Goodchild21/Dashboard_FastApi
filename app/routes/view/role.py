@@ -1,4 +1,3 @@
-# importing the required modules
 import json
 import uuid
 
@@ -23,7 +22,7 @@ role_view_route = APIRouter()
 role_crud = SQLAlchemyCRUD[RoleModelDB](RoleModelDB)
 
 
-# Defining a view route to navigate to the role page
+# Определение маршрута просмотра для перехода на страницу ролей
 @role_view_route.get("/role", response_class=HTMLResponse)
 async def get_role(
     request: Request,
@@ -36,9 +35,9 @@ async def get_role(
     try:
         if not current_user.is_superuser:
             raise HTTPException(
-                status_code=403, detail="Not authorized to view this page"
+                status_code=403, detail="Нет авторизации для данной страницы"
             )
-        # Access the cookies using the Request object
+        # Доступ к кукам с помощью объекта Request
         roles = await role_crud.read_all(db, skip, limit)
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
         response = templates.TemplateResponse(
@@ -59,18 +58,18 @@ async def get_role(
         )
 
 
-# Defining a get view route for showing form to add a new role to the database
+# Роутер для получения отображения формы и добавления новой роли в базу данных
 @role_view_route.get("/get_create_roles", response_class=HTMLResponse)
 async def get_create_roles(
     request: Request,
     current_user: UserModelDB = Depends(current_active_user),
     csrf_protect: CsrfProtect = Depends(),
 ):
-    # checking the current user as super user
+    # superuser
     try:
         if not current_user.is_superuser:
-            raise HTTPException(status_code=403, detail="Not authorized to add roles")
-        # Redirecting to the add role page upon successful role creation
+            raise HTTPException(status_code=403, detail="Нет авторизации")
+        # Добавления роли на страницу после успешного создания роли
 
         csrf_token = request.headers.get("X-CSRF-Token")
         response = templates.TemplateResponse(
@@ -96,7 +95,7 @@ async def get_create_roles(
         )
 
 
-# Defining a post view route for adding a new role to the database
+# Роутер записи для добавления новой роли в базу данных
 @role_view_route.post("/post_create_roles", response_class=HTMLResponse)
 async def post_create_roles(
     request: Request,
@@ -108,13 +107,13 @@ async def post_create_roles(
     try:
 
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
-            raise HTTPException(status_code=403, detail="Not authorized to add roles")
+            raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления формы")
 
         form = await request.form()
 
-        # Iterate over the form fields and sanitize the values before validating against the Pydantic model
+        # Очистка полей формы перед проверкой по модели Pydantic.
         role_create = RoleCreate(
             role_name=nh3.clean(str(form.get("role_name"))),
             role_desc=nh3.clean(str(form.get("role_desc"))),
@@ -130,14 +129,14 @@ async def post_create_roles(
 
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
 
-        # Redirecting to the add role page upon successful role creation
+        # Перенаправление на страницу добавления роли после успешного создания роли
         headers = {
             "HX-Location": "/role",
             "HX-Trigger": json.dumps(
                 {
                     "showAlert": {
                         "type": "added",
-                        "message": f"{role_create.role_name} added successfully",
+                        "message": f"{role_create.role_name} успешно дабавлено",
                         "source": "role-page",
                     },
                 }
@@ -166,7 +165,7 @@ async def post_create_roles(
         )
 
 
-# Defining end point to get the record based on the id
+# Определение эндпоинта для получения записи на основе id
 @role_view_route.get("/get_role/{role_id}", response_class=HTMLResponse)
 async def get_role_by_id(
     request: Request,
@@ -176,9 +175,9 @@ async def get_role_by_id(
     # csrf_protect: CsrfProtect = Depends(),
 ):
     try:
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
-            raise HTTPException(status_code=403, detail="Not authorized to add roles")
+            raise HTTPException(status_code=403, detail="Нет авторизации")
         role = await role_crud.read_by_primary_key(db, role_id)
 
         csrf_token = request.headers.get("X-CSRF-Token")
@@ -207,7 +206,7 @@ async def get_role_by_id(
         )
 
 
-# Defining end point to update the record based on the id
+# Эндпоинт для обновления записи на основе идентификатора
 @role_view_route.put("/post_update_role/{role_id}", response_class=HTMLResponse)
 async def post_update_role(
     request: Request,
@@ -219,13 +218,13 @@ async def post_update_role(
 ):
     try:
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
-            raise HTTPException(status_code=403, detail="Not authorized to add roles")
+            raise HTTPException(status_code=403, detail="Нет авторизации")
 
         form = await request.form()
 
-        # Iterate over the form fields and sanitize the values before validating against the Pydantic model
+        # Очистка полей формы перед проверкой по модели Pydantic.
         role_update = RoleCreate(
             role_name=nh3.clean(str(form.get("role_name"))),
             role_desc=nh3.clean(str(form.get("role_desc"))),
@@ -234,14 +233,14 @@ async def post_update_role(
         await role_crud.update(db, role_id, dict(role_update))
 
         csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
-        # Redirecting to the add role page upon successful role creation
+        # Перенаправление на страницу добавления роли после успешного создания роли
         headers = {
             "HX-Location": "/role",
             "HX-Trigger": json.dumps(
                 {
                     "showAlert": {
                         "type": "updated",
-                        "message": f"{role_update.role_name} updated successfully",
+                        "message": f"{role_update.role_name} успешно добавлено",
                         "source": "role-page",
                     },
                 }
@@ -266,7 +265,7 @@ async def post_update_role(
         )
 
 
-# Defining a route to delete the record based on the id
+# Роутер на удаление роли на основе id
 @role_view_route.delete("/delete_role/{role_id}", response_class=HTMLResponse)
 async def delete_role(
     request: Request,
@@ -277,10 +276,10 @@ async def delete_role(
 ):
     try:
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(
-                status_code=403, detail="Not authorized to delete roles"
+                status_code=403, detail="Нет авторизации"
             )
         await role_crud.delete(db, role_id)
 
@@ -292,7 +291,7 @@ async def delete_role(
                 {
                     "showAlert": {
                         "type": "deleted",
-                        "message": f"{role_name} deleted successfully",
+                        "message": f"{role_name} успешно удалено",
                         "source": "role-page",
                     },
                 }

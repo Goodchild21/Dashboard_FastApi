@@ -14,11 +14,10 @@ from app.database.db import CurrentAsyncSession
 from app.models.users import Role as UserRoleModelDB
 from app.models.users import UserProfile as UserProfileModelDB
 
-# Create an APIRouter
+
 login_view_route = APIRouter()
 
-#
-# group_view_route = APIRouter()
+
 group_crud = SQLAlchemyCRUD[GroupModelDB](
     GroupModelDB, related_models={UserModelDB: "users"}
 )
@@ -28,7 +27,7 @@ user_crud = SQLAlchemyCRUD[UserModelDB](
 )
 
 
-# Defining a route to navigate to the dashboard page using the current_active_user dependency
+# Роутер для перехода на страницу панели мониторинга с использованием зависимости current_active_user
 @login_view_route.get("/dashboard", response_class=HTMLResponse)
 async def get_dashboard(
     request: Request,
@@ -38,9 +37,9 @@ async def get_dashboard(
 ):
     csrf_token, signed_token = csrf_protect.generate_csrf_tokens()
 
-    groups = await group_crud.read_all(db, join_relationships=True)
+    groups = await group_crud.read_all(db, join_relationships=True) #
 
-    # Access the cookies using the Request object
+    # Доступ к кукам с помощью объекта Request
     cookies = request.cookies
     cookie_value = cookies.get("fastapiusersauth")
     response = templates.TemplateResponse(
@@ -48,7 +47,7 @@ async def get_dashboard(
         {
             "request": request,
             "title": "FastAPI-HTMX",
-            "message": f"Welcome to FastAPI-HTMX!{user.email}",
+            "message": f"Добро пожаловать в FastAPI-HTMX {user.email}!",
             "cookie_value": cookie_value,
             "csrf_token": csrf_token,
             "user_type": user.is_superuser,

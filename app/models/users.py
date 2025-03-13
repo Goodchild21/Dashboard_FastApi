@@ -2,7 +2,6 @@ from datetime import datetime
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 
-# from fastapi_users_db_sqlalchemy import GUID
 from sqlalchemy import UUID, DateTime, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql.functions import func
@@ -14,6 +13,7 @@ from app.models.upload import Upload
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
+    # Наследуется на базе SQLAlchemyBaseUserTableUUID из fastapi_users.db
     __tablename__ = "users"
     created: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
@@ -21,12 +21,12 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     updated: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
-    # add 1 to 1 relationship with the role model keeping default as None
-    # Default value on creating user is None and updated later
+
+    # Создание роли пользователя по дефолту
     role_id: Mapped[UUID] = mapped_column(
         ForeignKey("roles.id"), nullable=True, default=None
     )
-    # Role is defined in quotes to avoid type errors
+    # Роль указана в кавычках, чтобы избежать ошибки типов.
     role: Mapped["Role"] = relationship(
         "Role",
         uselist=False,
@@ -35,24 +35,24 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     profile_id: Mapped[UUID] = mapped_column(
         ForeignKey("user_profiles.id"), nullable=True, default=None
     )
-    # Profile 1 to 1 relationship with the user model
+    # Профиль 1 к 1 с моделью пользователя
     profile: Mapped["UserProfile"] = relationship(
         "UserProfile",
         uselist=False,
         back_populates="user",
         cascade="all, delete",
     )
-    # items: Mapped["Item"] = relationship(back_populates="user", cascade="all, delete")
-    # Creating a relationship with the activity model
+    # Указание на активацию пользователя в приложении
     activity: Mapped["UserActivity"] = relationship(
         "UserActivity", back_populates="user"
     )
+    # Загрузка файлов
     uploads: Mapped["Upload"] = relationship(
         "Upload",
         back_populates="user",
         cascade="all, delete",
     )
-    # Creating a relationship with the group user link model
+    # Создание связи с group_user_link
     groups: Mapped["Group"] = relationship(
         "Group",
         secondary="group_users",
@@ -60,7 +60,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
         uselist=True,
     )
 
-    # string representation of an object
+    # Строчное представление объекта
     def __repr__(self):
         return f"User(id={self.id!r}, name={self.email!r})"
 
@@ -80,35 +80,17 @@ class UserProfile(BaseSQLModel):
 
 
 class Role(BaseSQLModel):
-    """
-    A Role represents a set of permissions and privileges granted to a user.
-
-    Parameters:
-        role_name (str): The name of the role, e.g., "admin", "moderator", etc.
-        role_desc (str, optional): A description of the role.
-    """
-
+    # Роль представляет собой набор разрешений и привилегий, предоставленных пользователю.
     __tablename__ = "roles"
     role_name: Mapped[str] = mapped_column(
         String(length=200), nullable=False, unique=True
     )
     role_desc: Mapped[str | None] = mapped_column(String(length=1024), nullable=True)
-
-    # user_id: Mapped[UUID] = mapped_column(GUID, ForeignKey("users.id"))
     user: Mapped["User"] = relationship("User", back_populates="role")
 
 
 class UserActivity(BaseSQLModel):
-    """
-    Tracks user activities such as sign-ins, sign-ups, and other events.
-
-    Parameters:
-        user_id (UUID): The ID of the user.
-        activity_date (datetime): The date and time of the activity.
-        activity_type (str): The type of activity, such as "sign-in" or "sign-up".
-        activity_desc (str): A description of the activity.
-    """
-
+    # Отслеживает действия пользователей, такие как входы в систему, регистрации и другие события.
     __tablename__ = "user_activity"
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), default=None)
     activity_date: Mapped[datetime] = mapped_column(
@@ -119,4 +101,4 @@ class UserActivity(BaseSQLModel):
         String(length=1024), nullable=True
     )
     user: Mapped["User"] = relationship("User", back_populates="activity")
-    user: Mapped["User"] = relationship("User", back_populates="activity")
+    # user: Mapped["User"] = relationship("User", back_populates="activity")

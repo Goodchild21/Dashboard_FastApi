@@ -3,15 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block title %}Your Page Title{% endblock %}</title>
-    <!-- Add any other head elements here -->
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Добавь сюда любые другие элементы head -->
 
-    <!-- Include the CSS for Flowbite -->
+    <!-- Включить CSS для Flowbite -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"
       rel="stylesheet"
     />
-    <!-- Include the Flowbite JavaScript -->
+    <!-- Включить Flowbite JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
     <script src="/static/js/htmx.min.js?v=1.5.0"></script>
     <script>
@@ -19,6 +19,7 @@
         initFlowbite();
       });
     </script>
+    <!--  Загрузка AlpineJS  -->
     <script
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
@@ -29,13 +30,14 @@
   <body>
     {% if current_page not in ["register", "login"] %} {% include
     "partials/auth_navigation.html" %} {% endif %}
-    <!-- Your page content goes here -->
+
+    <!-- Содержание страницы будет здесь -->
     {% block content %}{% endblock %}
 
-    <!-- Components -->
+    <!-- Компоненты JS -->
     <script type="text/javascript" src="/static/js/components.js"></script>
 
-    <!-- Include the hyperscript script -->
+    <!-- Добавление hyperscript -->
     <script src="https://unpkg.com/hyperscript.org@0.9.11"></script>
 
     {% block additional_scripts %}{% endblock %}

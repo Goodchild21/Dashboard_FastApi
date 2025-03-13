@@ -1,5 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %} Edit Role | FastAPI HTMX
-{% endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Edit Role | FastAPI HTMX {% endblock %}
+
+{% block content %}
 
 <form
   id="edit-role-form"
@@ -22,7 +24,7 @@
       placeholder="Project Manager"
       _="on htmx:validation:validate
                 if my.value == ''
-                    call me.setCustomValidity('Please enter the Role Type')
+                    call me.setCustomValidity('Укажите роль')
                 else
                     call me.setCustomValidity('')"
       value="{{ role.role_name }}"

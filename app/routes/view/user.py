@@ -1,4 +1,3 @@
-# importing the required modules
 import json
 import uuid
 from datetime import datetime
@@ -18,10 +17,9 @@ from app.routes.view.errors import handle_error
 from app.routes.view.view_crud import SQLAlchemyCRUD
 from app.schema.users import ProfileUpdate
 
-# from app.schema.users import RoleCreate
 from app.templates import templates
 
-# Create an APIRouter
+# APIRouter
 user_view_route = APIRouter()
 
 
@@ -101,7 +99,7 @@ async def get_create_users(
         return handle_error("partials/user/add_user.html", {"request": request}, e)
 
 
-# Defining end point to get the record based on the id
+# Эндпоинт для получения записи на основе идентификатора
 @user_view_route.get("/get_user/{user_id}", response_class=HTMLResponse)
 async def get_user_by_id(
     request: Request,
@@ -113,7 +111,7 @@ async def get_user_by_id(
 ):
     try:
         roles = await role_crud.read_all(db, skip, limit)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(
                 status_code=403, detail="Вы не авторизованы для этой страницы"
@@ -147,7 +145,7 @@ async def get_user_by_id(
         )
 
 
-# Defining a endpoint to update the record based on the id
+# Эндпоинт для обновления записи на основе идентификатора
 @user_view_route.put("/post_update_user/{user_id}", response_class=HTMLResponse)
 async def post_update_user(
     request: Request,
@@ -160,12 +158,12 @@ async def post_update_user(
 
     try:
         await csrf_protect.validate_csrf(request)
-        # checking the current user as super user
+        # superuser
         if not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="Отсутствует авторизация для добавления данных!")
 
         form = await request.form()
-        # Iterate over the form fields and sanitize the values before validating against the Pydantic model
+        # Очистка полей формы перед проверкой по модели Pydantic
         profile_data = ProfileUpdate(
             first_name=nh3.clean(str(form.get("first_name"))),
             last_name=nh3.clean(str(form.get("last_name"))),
@@ -190,17 +188,17 @@ async def post_update_user(
                 status_code=400, detail="Необходима роль для создания профиля пользователя"
             )
 
-        # Fetch the user being updated
+        # Пользователь обновляется
         user_to_update = await user_crud.read_by_primary_key(db, user_id)
 
         if user_to_update.profile_id is None:
-            # Create UserProfile
+            # Создать профиль
             new_profile = await user_profile_crud.create(dict(profile_data), db)
 
-            # Update user profile id
+            # Обновить профиль по id
             await user_crud.update(db, user_id, {"profile_id": new_profile.id})
 
-            # Update user role
+            # Обновить роль
             if role_id:
                 await user_crud.update(db, user_id, {"role_id": role_id})
 
@@ -226,12 +224,12 @@ async def post_update_user(
 
             return response
         else:
-            # Update existing user profile
+            # Обновить существующий профиль
             await user_profile_crud.update(
                 db, user_to_update.profile_id, dict(profile_data)
             )
 
-            # Редактирование профиля
+            # Редактировать существующий профиль
             if role_id:
                 await user_crud.update(db, user_id, {"role_id": role_id})
 

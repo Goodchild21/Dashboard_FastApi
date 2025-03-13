@@ -1,5 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %} Группа | FastAPI HTMX {%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Группа | FastAPI HTMX {% endblock %}
+
+{% block content %}
 <li>
   {% if user_profile.profile and user_profile.profile.first_name %}
   {{user_profile.role.role_name}}: {{user_profile.profile.first_name}} {{user_profile.profile.last_name}} | Статус:

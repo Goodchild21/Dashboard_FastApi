@@ -1,5 +1,7 @@
-{% extends "base/auth_base.html" %} {% block title %}Добавить статус | FastAPI HTMX {%
-endblock %} {% block content %}
+{% extends "base/auth_base.html" %}
+{% block title %} Добавить статус | FastAPI HTMX {% endblock %}
+
+{% block content %}
 
 <form
   id="create-role-form"
@@ -26,7 +28,7 @@ endblock %} {% block content %}
       id="role-type"
       name="role_name"
       x-model="roleName"
-      x-effect="roleTypeError = !roleName ? 'Please enter the Role Type' : ''"
+      x-effect="roleTypeError = !roleName ? 'Укажите роль' : ''"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
       placeholder="Например: Student"
       required
@@ -49,7 +51,7 @@ endblock %} {% block content %}
       id="role-desc"
       name="role_desc"
       x-model="roleDesc"
-      x-effect="roleDescError = !roleDesc ? 'Please enter the Role Description' : ''"
+      x-effect="roleDescError = !roleDesc ? 'Добавьте описание роли' : ''"
       placeholder="Например: Постигает глубины Python"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
       required

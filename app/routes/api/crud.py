@@ -5,7 +5,6 @@ from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
 
-# from sqlalchemy.orm import Session
 from app.database.base import Base
 from app.database.db import CurrentAsyncSession
 
@@ -38,32 +37,30 @@ class BaseCRUD(Generic[ModelType, PydanticCreateModelType, PydanticUpdateModelTy
         return db_item
 
     async def read_all(self, db: CurrentAsyncSession, skip: int, limit: int):
-        # Querying the database model using SQLAlchemy select()
+        # Запрос модели базы данных с использованием SQLAlchemy select()
         stmt = select(self.db_model).offset(skip).limit(limit)
         query = await db.execute(stmt)
-        # Adding a exception to be raised in case if record not exists
+        # Добавление исключения, которое будет вызвано в случае, если запись не существует
         if not query:
-            raise HTTPException(status_code=404, detail="Record not found")
+            raise HTTPException(status_code=404, detail="Запись не найдена")
         return query.scalars().all()
 
-        # return db.query(self.db_model).offset(skip).limit(limit).all()
-
-    # Reading the one record only from the database model
+    # Чтение одной записи из модели базы данных
     async def read(self, db: CurrentAsyncSession, id: uuid.UUID) -> ModelType | None:
         stmt = select(self.db_model).where(self.db_model.id == id)
         query = await db.execute(stmt)
         if not query:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         return query.scalar_one_or_none()
 
-    # Adding a database operation function to update the record
+    # Добавление функции для обновления записи
     async def update(
         self, db: CurrentAsyncSession, id: uuid.UUID, item: PydanticUpdateModelType
     ) -> ModelType | None:
         stmt = select(self.db_model).where(self.db_model.id == id)
         query = await db.execute(stmt)
         if not query:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         db_item = query.scalar_one()
         if db_item:
             for key, value in item.dict().items():
@@ -72,7 +69,7 @@ class BaseCRUD(Generic[ModelType, PydanticCreateModelType, PydanticUpdateModelTy
             await db.refresh(db_item)
             return db_item
 
-    # Adding a database model to delete a record
+    # Добавление модели для удаления записи
     async def delete(
         self,
         db: CurrentAsyncSession,
@@ -81,7 +78,7 @@ class BaseCRUD(Generic[ModelType, PydanticCreateModelType, PydanticUpdateModelTy
         stmt = select(self.db_model).where(self.db_model.id == id)
         query = await db.execute(stmt)
         if not query:
-            raise HTTPException(status_code=404, detail=f"Record with {id} not found")
+            raise HTTPException(status_code=404, detail=f"Запись {id} не найдена")
         db_item = query.scalar_one()
         if db_item:
             await db.delete(db_item)
