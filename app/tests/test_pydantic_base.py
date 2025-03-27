@@ -7,17 +7,17 @@ from ..schema.pydantic_base import pydantic_partial
 
 
 class TestPartialModel:
-    # The function returns a new BaseModel with all fields optional if exclude_fields is None.
+    # Функция возвращает новую BaseModel со всеми необязательными полями, если exclude_fields равно None.
     def test_all_fields_optional_if_exclude_fields_is_none(self):
-        # Arrange
+        #
         class MyModel(BaseModel):
             field1: int
             field2: str
 
-        # Act
+        # Объект
         partial = pydantic_partial()(MyModel)
 
-        # Assert
+        # Утверждения
         assert issubclass(partial, BaseModel)
         assert "field1" in partial.schema()["properties"]
         assert "field2" in partial.schema()["properties"]
@@ -26,72 +26,72 @@ class TestPartialModel:
         if "type" in partial.schema()["properties"]["field2"]:
             assert partial.schema()["properties"]["field2"]["type"] == "string"
 
-    # The function returns a new BaseModel with specified fields optional if exclude_fields is a list of field names.
+    # Функция возвращает новую BaseModel с указанными полями (необязательно), если exclude_fields — это список имен полей.
     def test_specified_fields_optional_if_exclude_fields_is_list(self):
-        # Arrange
+        #
         class MyModel(BaseModel):
             field1: int
             field2: str
             field3: float
 
-        # Act
+        # Объект
         partial = pydantic_partial(exclude_fields=["field1", "field3"])(MyModel)
 
-        # Assert
+        # Утверждения
         assert issubclass(partial, BaseModel)
         assert "field1" not in partial.__annotations__
         assert partial.__annotations__["field2"] == Optional[str]
         assert "field3" not in partial.__annotations__
 
-    # The function returns a new BaseModel with the same name and module as the original model.
+    # Функция возвращает новую BaseModel с тем же именем и модулем, что и у исходной модели.
     def test_same_name_and_module_as_original_model(self):
-        # Arrange
+        #
         class MyModel(BaseModel):
             field1: int
             field2: str
 
-        # Act
+        # Объект
         partial = pydantic_partial()(MyModel)
 
-        # Assert
+        # Утверждения
         assert partial.__name__ == "MyModel"
         assert partial.__module__ == MyModel.__module__
 
-    # The function returns a new BaseModel with no fields if exclude_fields is an empty list.
+    # Функция возвращает новую BaseModel без полей, если exclude_fields — пустой список.
     def test_no_fields_if_exclude_fields_is_empty_list(self):
-        # Arrange
+        #
         class MyModel(BaseModel):
             field1: int
             field2: str
 
-        # Act
+        # Объект
         partial = pydantic_partial(exclude_fields=[])(MyModel)
 
-        # Assert
+        # Утверждения
         assert issubclass(partial, BaseModel)
         assert len(partial.__annotations__) == 2
 
-    # The function returns a new BaseModel with no fields if exclude_fields contains all field names.
+    # Функция возвращает новую BaseModel без полей, если exclude_fields содержит все имена полей.
     def test_no_fields_if_exclude_fields_contains_all_field_names(self):
-        # Arrange
+        #
         class MyModel(BaseModel):
             field1: int
             field2: str
 
-        # Act
+        # Объект
         partial = pydantic_partial(exclude_fields=["field1", "field2"])(MyModel)
 
-        # Assert
+        # Утверждения
         assert issubclass(partial, BaseModel)
         assert len(partial.__annotations__) == 0
 
-    # The function raises an exception if the original model is not a subclass of BaseModel.
+    # Функция вызывает исключение, если исходная модель не является подклассом BaseModel.
     def test_exception_if_original_model_not_subclass_of_BaseModel(self):
-        # Arrange
+        #
         class MyModel:
             field1: int
             field2: str
 
-        # Act & Assert
+        # Объект и утверждения
         with pytest.raises(TypeError):
             pydantic_partial()(MyModel)

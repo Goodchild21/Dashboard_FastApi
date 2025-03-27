@@ -5,14 +5,14 @@ from app.schema.users import RoleBase, RoleCreate
 
 
 def test_create_valid_roles():
-    # Test valid input
+    # Проверка допустимого ввода
     role = RoleCreate(role_name="admin", role_desc="Role description")
     assert role.role_name == "admin"
     assert role.role_desc == "Role description"
 
 
 def test_create_invalid_roles():
-    # Test invalid input
+    # Проверка недопустимого ввода
     with pytest.raises(ValidationError):
         RoleCreate(role_name="a", role_desc="Role description")
     with pytest.raises(ValidationError):
@@ -20,7 +20,7 @@ def test_create_invalid_roles():
 
 
 def test_create_roles_with_long_inputs():
-    # Test invalid input where role_name is more than 50 characters and role_desc is more than 200
+    # Проверка валидности ввода, где role_name содержит более 50 символов, а role_desc содержит более 200 символов.
     with pytest.raises(ValidationError):
         RoleCreate(role_name="a" * 51, role_desc="Role description")
     with pytest.raises(ValidationError):
@@ -28,6 +28,6 @@ def test_create_roles_with_long_inputs():
 
 
 def test_create_roles_with_default_desc():
-    # Test default value for role_desc
+    # Тестовое значение по умолчанию для role_desc
     role = RoleBase(role_name="admin")
     assert role.role_desc is None

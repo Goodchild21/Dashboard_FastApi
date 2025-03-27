@@ -10,7 +10,7 @@
   hx-swap="outerHTML"
 >
   <div class="mb-6">
-    <h2 class="mb-4 text-xl font-bold">General Profile</h2>
+    <h2 class="mb-4 text-xl font-bold">Профиль</h2>
     <label
       for="first_name"
       class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -21,7 +21,7 @@
       id="first_name"
       name="first_name"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-      placeholder="First Name"
+      placeholder="Имя"
       value="{{ user.profile.first_name |e}}"
       required
     />
@@ -37,7 +37,7 @@
       id="last_name"
       name="last_name"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-      placeholder="Last Name"
+      placeholder="Фамилия"
       value="{{ user.profile.last_name | e}}"
       required
     />
@@ -62,43 +62,10 @@
       type="date"
       id="dob"
       name="dob"
-      placeholder="Date of Birth (YYYY-MM-DD)"
+      placeholder="Дата рождения (YYYY-MM-DD)"
       value="{{ user.profile.date_of_birth.strftime('%Y-%m-%d') if user.profile.date_of_birth }}"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
       required
-    />
-  </div>
-
-  <div class="mb-6">
-    <label
-      for="address"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >Адрес</label
-    >
-    <input
-      type="text"
-      id="address"
-      name="address"
-      placeholder="Primary Address"
-      value="{{ user.profile.address | e}}"
-      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-
-    />
-  </div>
-  <div class="mb-6">
-    <label
-      for="city"
-      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-      >Город</label
-    >
-    <input
-      type="text"
-      id="city"
-      name="city"
-      placeholder="City"
-      value="{{ user.profile.city | e}}"
-      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-
     />
   </div>
 
@@ -112,8 +79,42 @@
       type="text"
       id="country"
       name="country"
-      placeholder="Country"
+      placeholder="Страна"
       value="{{ user.profile.country | e}}"
+      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+
+    />
+  </div>
+
+  <div class="mb-6">
+    <label
+      for="city"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Город</label
+    >
+    <input
+      type="text"
+      id="city"
+      name="city"
+      placeholder="Город"
+      value="{{ user.profile.city | e}}"
+      class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
+
+    />
+  </div>
+
+  <div class="mb-6">
+    <label
+      for="address"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Адрес</label
+    >
+    <input
+      type="text"
+      id="address"
+      name="address"
+      placeholder="Адрес регистрации"
+      value="{{ user.profile.address | e}}"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
 
     />
@@ -124,10 +125,11 @@
     <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
       Номер телефона:</label>
     <div class="relative">
-      <input type="text" value="{{ user.profile.phone | e}}" name="phone" id="phone" aria-describedby="helper-text-explanation" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-20 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="USA: (123) 456-7890 or UK: 01234 567890 or Australia: 0412 345 678" required />
+      <input type="text" value="{{ user.profile.phone | e}}" name="phone" id="phone" aria-describedby="helper-text-explanation" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-20 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             placeholder="+7(953)4217689 или 89534217689" required />
 <!--      pattern="^(\+?1?\s*?\(?\d{3}[\)\-\s]?\d{3}[\-\s]?\d{4}|\+?\d{2}?\s?\d{4}\s?\d{6})$"-->
     </div>
-  <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Select a phone number that matches the format.</p>
+  <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Введите номер в указанном формате</p>
   </div>
 
   <div class="mb-6">
@@ -140,15 +142,14 @@
       type="text"
       id="company"
       name="company"
-      placeholder="Company"
+      placeholder="Компания"
       value="{{ user.profile.company | e}}"
       class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
-
     />
   </div>
   <h2 class="mb-4 mt-8 text-xl font-bold">Статус в приложении</h2>
   <div class="mb-6">
-    <label for="role-selection" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role Selection</label>
+    <label for="role-selection" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Выберете роль</label>
     <select id="role-selection" name="role_id" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required>
       <option value="">Выбрать статус</option>
       {% for role in roles %}

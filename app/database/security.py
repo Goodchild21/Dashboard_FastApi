@@ -21,7 +21,7 @@ from app.database.db import User, get_user_db
 SECRET: str = os.getenv("AUTH_SECRET", "my_default_secret_key")
 
 logger.critical(
-    "The SECRET key is being logged! Remove this before deploying to production."
+    "SECRET key запущен! Удалите его перед запуском в продакшн"
 )
 logger.critical(SECRET)
 
@@ -90,7 +90,7 @@ async def verify_jwt(
     try:
         async for user_manager in get_user_manager(user_db=user_db):
             payload = user_manager.on_decode_jwt(jwt_token)
-            # Add your verification logic here
+
     except InvalidTokenError:
         logger.debug(payload)
     if payload:

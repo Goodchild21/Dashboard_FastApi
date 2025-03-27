@@ -1,8 +1,7 @@
 import pytest
 from sqlalchemy import select
 
-from app.database.base import Base
-from app.database.db import async_session_maker, engine
+from app.database.base import Base, engine, async_session_maker
 from app.models.users import Role
 
 
@@ -18,15 +17,14 @@ async def db_session():
 
 @pytest.fixture(scope="module")
 def valid_role():
-    return Role(role_name="Ezzeddin", role_desc="Aybak")
+    return Role(role_name="Developer")
 
 
 class TestRole:
     async def test_author_valid(self, db_session, valid_role):
         async with db_session() as session:
-            session.add(valid_role)
-            await session.commit()
-            aybak = await session.execute(select(Role).filter_by(lastname="Aybak"))
-            result = aybak.scalars().first()
-            assert result.role_name == "Ezzeddin"
-            assert result.desc != "Abdullah"
+            await session.add(valid_role)
+            session.commit()
+            obj = await session.execute(select(Role).filter_by(role_name="Developer"))
+            result = obj.scalars().first()
+            assert result.role_name == "Developer"

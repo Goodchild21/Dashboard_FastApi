@@ -27,13 +27,13 @@ async def create_db_and_tables():
         )
         if not query.scalars().first():
             logger.info(
-                f"Creating superuser... email: {user.email} | password: password123"
+                f"Суперпользователь создан... email: {user.email}"
             )
             session.add(user)
             await session.commit()
-        else:  # pragma: no cover
+        else:
             logger.info(
-                f"Superuser already exists.... email: {user.email} | password: password123"
+                f"Вход под учетной записью суперпользователя... email: {user.email}"
             )
 
 

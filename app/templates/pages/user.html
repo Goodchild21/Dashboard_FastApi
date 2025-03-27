@@ -134,7 +134,7 @@
                   </td>
                   <td class="px-6 py-4">
                     {% if user.role and user.role.role_name %} {{
-                    user.role.role_name }} {% else %} Нет в наличии {% endif %}
+                    user.role.role_name }} {% else %} Нет {% endif %}
                   </td>
 
                   <td class="px-6 py-4">
@@ -216,7 +216,7 @@
                   <td class="pr-3 py-4 text-right">
                     <a
                       href="#"
-                      hx-confirm="Are you sure you want to delete this user? "
+                      hx-confirm="Уверены, что хотите удалить данного пользователя? "
                       onclick="deleteUser('{{ user.id }}', '{{token}}')"
                       class="font-medium text-red-600 dark:text-red-500 hover:underline"
                       >Удалить</a
