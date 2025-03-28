@@ -1,0 +1,15 @@
+# Конфигурация базы данных
+DATABASE_URL="sqlite+aiosqlite:///./users.db"
+SECRET_KEY="super-secret-key-example-123456789"
+
+# CSRF ключ
+CSRF_SECRET_KEY="csrf-secret-key-example-987654321"
+COOKIE_SAMESITE="lax"
+COOKIE_SECURE=true
+
+# Конфигурация MinIO (требуется для загрузки файлов)
+MINIO_URL="http://localhost:9000"
+MINIO_ACCESS_KEY="minioadmin123456789"
+MINIO_SECRET_KEY="miniosecret987654321xyz"
+MINIO_BUCKET="my-fastapi-bucket"
+MINIO_SECURE=false
